@@ -13,8 +13,8 @@ self.addEventListener('activate', event => {
 	console.log("service worker activated", event);
 })
 
-// self.addEventListener('fetch', event => {
-// 	event.respondWith(caches.match(event.request)
-// 		.then(response=>{ if(response) return response; })
-// 	)
-// })
+self.addEventListener('fetch', event => {
+	event.respondWith(caches.match(event.request)
+		.then(response=>{ console.log(response); if(response) return response; })
+	)
+})
