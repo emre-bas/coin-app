@@ -81,7 +81,7 @@
 							<td>#0x{{item.from.id}} @{{item.from.name}}</td>
 							<td>#0x{{item.to.id}} @{{item.to.name}}</td>
 							<td>{{item.amount}}</td>
-							<td>{{item.fee}}</td>
+							<td>{{item.fee.toFixed(2)}}</td>
 							<td>{{item.description}}</td>
 							<td>{{new Date(item.created_date).toLocaleString()}}</td>
 						</tr>
@@ -110,7 +110,7 @@
 						<tr v-for="item in response.data">
 							<td>{{item.id}}</td>
 							<td>{{item.name}}</td>
-							<td>{{item.balance}}</td>
+							<td>{{item.balance.toFixed(2)}}</td>
 							<td>{{new Date(item.created_date).toLocaleString()}}</td>
 							<td>{{new Date(item.updated_date).toLocaleString()}}</td>
 						</tr>
