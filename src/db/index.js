@@ -22,7 +22,7 @@ const db = {
 
 db.methods = {
 	listWallet(limit=100,skip=0){
-		return db.models.wallet.find().limit(limit*1).skip(skip*1)
+		return db.models.wallet.find().limit(limit*1).skip(skip*1).sort({balance:-1})
 		.then(wallets=>wallets.map(x=>filterWallet(x)))
 		.catch(err=>null);
 	},
