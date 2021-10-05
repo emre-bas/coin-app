@@ -1,10 +1,10 @@
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('js/service-worker.js').then((response) => {
-	  console.log('ServiceWorker registration successful');
+		console.log('ServiceWorker registration successful');
 	}, (err) => {
-	  console.log('ServiceWorker registration failed');
+		console.log('ServiceWorker registration failed');
 	});
-  }
+}
 var data = {
 	appTitle: "Coin App",
 	appText: "An Experimental Coin Application",
