@@ -11,8 +11,8 @@ ui = require("./src/ui");
 
 // App
 const app = express();
-app.use(ui.router);
 app.use("/api",api.router);
+app.use(ui.router);
 
 // Run
 const mongooseOptions = {}; //{useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify:false, useCreateIndex:true}

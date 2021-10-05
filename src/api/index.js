@@ -4,6 +4,7 @@ const api = {
 
 api.router.use("*",(req,res,next)=>{
     console.log(">>> ",req.baseUrl,req.query);
+    if(req.baseUrl=="/api") res.send("/api");
     next();
 })
 

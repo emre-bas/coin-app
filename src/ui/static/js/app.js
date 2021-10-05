@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	app = new Vue({
 		data,
-		router:new VueRouter({routes}),
+		router: new VueRouter({routes,mode:"history"}),
 		created(){
 			this.login();
 		},
