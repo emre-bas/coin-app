@@ -1,0 +1,43 @@
+{
+    "name": "Coin App",
+    "short_name": "Coin App",
+    "description": "An Experimental Coin Application",
+    "lang": "en-US",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "theme_color": "#FFD700",
+    "background_color": "#1f1f1f",
+    "icons": [
+      {
+        "src": "images/coin-icon-1024m.png",
+        "sizes": "1024x1024",
+        "type": "image/png"
+      },
+      {
+        "src": "images/coin-icon-512m.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "images/coin-icon-256m.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      },
+      {
+        "src": "images/coin-icon-128m.png",
+        "sizes": "128x128",
+        "type": "image/png"
+      },
+      {
+        "src": "images/coin-icon-64m.png",
+        "sizes": "64x64",
+        "type": "image/png"
+      },
+      {
+        "src": "images/coin-icon-32m.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      }
+    ]
+  }

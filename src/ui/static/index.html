@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="noindex">
+	<title>Coin App</title>
+	<meta name="description" content="An Experimental Coin Application">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="https://unpkg.com/vue-router@3.5.2/dist/vue-router.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/app.js"></script>
+	<link rel="manifest" href="manifest.json">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="Coin App">
+	<meta name="apple-mobile-web-app-title" content="Coin App">
+	<meta name="theme-color" content="#FFD700">
+	<meta name="msapplication-navbutton-color" content="#FFD700">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="icon" type="image/png" sizes="1024x1024" href="images/coin-icon-1024.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="1024x1024" href="images/coin-icon-1024.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="images/coin-icon-512.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="images/coin-icon-512.png">
+	<link rel="icon" type="image/png" sizes="256x256" href="images/coin-icon-256.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="256x256" href="images/coin-icon-256.png">
+	<link rel="icon" type="image/png" sizes="128x128" href="images/coin-icon-128.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="128x128" href="images/coin-icon-128.png">
+	<link rel="icon" type="image/png" sizes="64x64" href="images/coin-icon-64.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="64x64" href="images/coin-icon-64.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/coin-icon-32.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="32x32" href="images/coin-icon-32.png">
+</head>
+<body>
+	<div id="app" v-cloak>
+		<div class="container-fluid">
+			<h1 class="text-center">{{appTitle}}</h1>
+			<p class="text-center">{{appText}}</p>
+		</div>
+		<navbar></navbar>
+		<router-view></router-view>
+	</div>
+
+	<!-- Page Components -->
+	<component-template name="main">
+		<div class="container my-5">
+			<img src="images/coin-icon-128m.png" alt="Coin Icon"
+				class="rounded-circle border border-5 border-warning bg-dark mx-auto d-block">
+			<br>
+			<h1 class="text-center">{{$root.appTitle}}</h1>
+			<h3 class="text-center">{{$root.appText}}</h3>
+		</div>
+	</component-template>
+
+	<component-template name="transactions">
+		<div class="container my-5">
+			<h1>Transactions</h1>
+			<loading v-if="!isLoaded"></loading>
+			<div v-if="response.data" class="table-responsive">
+				<table class="table table-striped table-dark table-hover">
+					<thead>
+						<tr>
+							<th>from</th>
+							<th>to</th>
+							<th>amount</th>
+							<th>fee</th>
+							<th>description</th>
+							<th>created_date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="item in response.data">
+							<td>#0x{{item.from.id}} @{{item.from.name}}</td>
+							<td>#0x{{item.to.id}} @{{item.to.name}}</td>
+							<td>{{item.amount}}</td>
+							<td>{{item.fee}}</td>
+							<td>{{item.description}}</td>
+							<td>{{new Date(item.created_date).toLocaleString()}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="wallets">
+		<div class="container my-5">
+			<h1>Wallets</h1>
+			<loading v-if="!isLoaded"></loading>
+			<div v-if="response.data" class="table-responsive">
+				<table class="table table-striped table-dark table-hover">
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>name</th>
+							<th>balance</th>
+							<th>created_date</th>
+							<th>updated_date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="item in response.data">
+							<td>{{item.id}}</td>
+							<td>{{item.name}}</td>
+							<td>{{item.balance}}</td>
+							<td>{{new Date(item.created_date).toLocaleString()}}</td>
+							<td>{{new Date(item.updated_date).toLocaleString()}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="create-wallet">
+		<div class="container my-5">
+			<h1>Create a new wallet</h1>
+			<div class="card my-3">
+				<div v-if="!isSent" class="card-body">
+					<div class="my-3">
+						<label>Wallet Name</label>
+						<input type="text" class="form-control" placeholder="name" v-model="form.name">
+						<div class="form-text">Give a name to your wallet! (<code>[a-z] [0-9] "_"</code>)</div>
+					</div>
+					<div class="my-3">
+						<label>Wallet Password</label>
+						<div class="input-group">
+							<input type="password" class="form-control" placeholder="password" v-model="form.password">
+							<button class="btn btn-secondary" onclick="data.togglePassType(this)">
+								<i class="far fa-eye-slash"></i></button>
+						</div>
+						<div class="form-text">
+							Create a strong password and <span class="text-danger fw-bold">Never forget it</span>!</div>
+					</div>
+					<button class="btn btn-outline-primary mx-auto d-block" @click="create()">Create My Wallet</button>
+				</div>
+				<div v-if="isSent && response.data" class="card-body">
+					<div class="alert alert-success">
+						<strong>Great!</strong> Your wallet has been created!
+					</div>
+					<coin-card :wallet="response.data"></coin-card>
+				</div>
+				<div v-if="isSent && response.err" class="card-body">
+					<button class="btn btn-outline-info mx-auto d-block m-1" @click="reset()">Try again!</button>
+					<div class="alert alert-danger">
+						<strong>Error!</strong> Your wallet has not been created!
+						<hr><pre>{{response.err}}</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="login">
+		<div class="container my-5">
+			<h1>Login with your wallet</h1>
+			<div class="card my-3">
+				<div v-if="!isSent" class="card-body">
+					<div class="my-3">
+						<label>Your Wallet</label>
+						<input type="text" class="form-control" placeholder="account" required v-model="form.account">
+						<div class="form-text">Wallet ID or Wallet Name</div>
+					</div>
+					<div class="my-3">
+						<label>Wallet Password</label>
+						<div class="input-group">
+							<input type="password" class="form-control" placeholder="password" required="true" v-model="form.password">
+							<button class="btn btn-secondary" onclick="data.togglePassType(this)">
+								<i class="far fa-eye-slash"></i></button>
+						</div>
+					</div>
+					<button class="btn btn-outline-success mx-auto d-block" @click="login()">Login</button>
+				</div>
+				<div v-if="isSent && response.err" class="card-body">
+					<button class="btn btn-outline-info mx-auto d-block m-1" @click="reset()">Try logging in again!</button>
+					<div class="alert alert-danger">
+						<strong>Error!</strong> Your wallet has not been verified!
+						<hr><pre>{{response.err}}</pre>
+					</div>
+				</div>
+				<div v-if="isSent && response.data" class="card-body">
+					<div class="alert alert-success">
+						<strong>Great!</strong> You logged-in!
+					</div>
+				</div>
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="logout">
+		<div class="container my-5">
+			<div class="alert alert-info">
+				<strong>Log-out!</strong> You logged-out!
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="my-wallet">
+		<div class="container my-5">
+			<h1>My Wallet</h1>
+			<loading v-if="!isLoaded"></loading>
+			<coin-card v-if="response.data" :wallet="response.data"></coin-card>
+			<edit-wallet v-if="response.data" :wallet="response.data"></edit-wallet>
+		</div>
+	</component-template>
+
+	<component-template name="send-coin">
+		<div class="container my-5">
+			<h1>Send Coin</h1>
+			<loading v-if="!isLoaded"></loading>
+			<div class="card my-3">
+				<div v-if="response.data" class="card-body">
+					<div class="my-3">
+						<label>Target Wallet</label>
+						<select class="form-select" placeholder="Default select example" v-model="form.targetId">
+							<option value="">Select a wallet</option>
+							<option :value="wallet.id" v-for="wallet in response.data">
+								#0x{{wallet.id}} @{{wallet.name}}</option>
+						</select>
+						<div class="form-text">Which Wallet? Select Target Wallet!</div>
+					</div>
+					<div class="my-3">
+						<label>Amount</label>
+						<input type="number" min="0.01" step="0.01" class="form-control" placeholder="amount"
+							required v-model="form.amount">
+						<div class="form-text">How much coin?</div>
+					</div>
+					<div class="my-3">
+						<label>Description</label>
+						<input type="text" min="0.01" step="0.01" class="form-control" placeholder="description"
+							required v-model="form.description">
+						<div class="form-text">Add a description, if you want!</div>
+					</div>
+					<div class="my-3 border-top border-bottom">
+						<div class="row">
+							<div class="col fw-bold">Amount : <i class="fas fa-coins me-1"></i>{{form.amount}}</div>
+							<div class="col fw-bold">Fee : + <i class="fas fa-coins me-1"></i>{{form.fee}}</div>
+							<div class="col fw-bold">Total : <i class="fas fa-coins me-1"></i>{{form.amount*1+form.fee*1}}</div>
+						</div>
+					</div>
+					<div class="my-5">
+						<button class="btn btn-outline-primary mx-auto d-block" @click="send()">Send Coin</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</component-template>
+
+	<!-- Inner Components -->
+	<component-template name="navbar">
+		<nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top px-3">
+			<router-link class="navbar-brand text-warning fw-bold" to="/">
+				<i class="fas fa-home me-1"></i>{{$root.appTitle}}</router-link>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTopbar">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-center" id="collapseTopbar">
+				<ul class="navbar-nav">
+					<li v-if="!$root.myWallet" class="nav-item" v-for="item in $root.topbar.public">
+						<router-link class="nav-link" :class="{active:$route.path==item.route}" :to="item.route">
+							<i :class="item.icon"></i> {{item.text}}</router-link>
+					</li>
+					<li v-if="$root.myWallet" class="nav-item" v-for="item in $root.topbar.private">
+						<router-link class="nav-link" :class="{active:$route.path==item.route}" :to="item.route">
+							<i :class="item.icon"></i> {{item.text}}</router-link>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</component-template>
+
+	<component-template name="coin-card">
+		<div class="card bg-warning text-white mw-512 mx-auto">
+			<div class="card-header text-center"> <strong>Coin Card</strong> </div>
+			<div class="card-body">
+				<img class="rounded mx-auto d-block" 
+					:src="`https://chart.googleapis.com/chart?chs=120x120&cht=qr&chl=0x${wallet.id}&choe=UTF-8`">
+				<h5 class="card-title text-center"> 0x{{wallet.id}} </h5>
+				<h5 class="card-title text-center"> <i class="fas fa-at me-1"></i>{{wallet.name}} </h5>
+				<br>
+				<h5 class="text-end card-text">
+					<small><i class="fas fa-calendar me-1"></i></small>
+					{{new Date(wallet.created_date).toLocaleString()}} </h5>
+
+			</div>
+			<div class="card-footer text-center">
+				<i class="fas fa-coins"></i> <span class="fw-bold fs-4">{{wallet.balance}}</span>
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="edit-wallet">
+		<div class="card my-5">
+			<div class="card-header">
+				<h3>Edit My Wallet Info</h3>
+			</div>
+			<div class="card-body">
+				<div class="my-3">
+					<label>Wallet Name</label>
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Wallet Name" v-model="form.name">
+						<button class="btn btn-outline-primary" @click="edit('name')">Save</button>
+					</div>
+				</div>
+				<div class="my-3">
+					<label>Wallet Password</label>
+					<div class="input-group">
+						<input type="password" class="form-control" placeholder="Wallet Password"
+							v-model="form.password">
+						<button class="btn btn-secondary" onclick="data.togglePassType(this)">
+							<i class="far fa-eye-slash"></i></button>
+						<button class="btn btn-outline-primary" @click="edit('password')">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</component-template>
+
+	<component-template name="loading">
+		<div class="alert text-center" :class="'alert-'+color">
+			<h5>Loading!</h5>
+			<h5 class="spinner-border" :class="'text-'+color"></h5>
+			<br>
+			<slot></slot>
+		</div>
+	</component-template>
+</body>
+</html>

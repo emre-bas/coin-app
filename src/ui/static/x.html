@@ -1,0 +1,17 @@
+<button v-if="isSent" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_createWallet">
+    View My Wallet</button>
+<div class="modal fade" id="modal_createWallet" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Your Wallet</h5>
+            </div>
+            <div class="modal-body">
+                {{response}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Understood😉</button>
+            </div>
+        </div>
+    </div>
+</div>
