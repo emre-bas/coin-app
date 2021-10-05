@@ -3,7 +3,7 @@
     "short_name": "Coin App",
     "description": "An Experimental Coin Application",
     "lang": "en-US",
-    "start_url": "/",
+    "start_url": "./",
     "scope": ".",
     "display": "standalone",
     "theme_color": "#FFD700",
