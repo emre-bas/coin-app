@@ -265,11 +265,13 @@
 			<div class="collapse navbar-collapse justify-content-center" id="collapseTopbar">
 				<ul class="navbar-nav">
 					<li v-if="!$root.myWallet" class="nav-item" v-for="item in $root.topbar.public">
-						<router-link class="nav-link" :class="{active:$route.path==item.route}" :to="item.route">
+						<router-link class="nav-link" :class="{active:$route.path==item.route}" :to="item.route"
+							onclick="document.querySelector('.collapse').classList.remove('show')">
 							<i :class="item.icon"></i> {{item.text}}</router-link>
 					</li>
 					<li v-if="$root.myWallet" class="nav-item" v-for="item in $root.topbar.private">
-						<router-link class="nav-link" :class="{active:$route.path==item.route}" :to="item.route">
+						<router-link class="nav-link" :class="{active:$route.path==item.route}" :to="item.route"
+							onclick="document.querySelector('.collapse').classList.remove('show')">
 							<i :class="item.icon"></i> {{item.text}}</router-link>
 					</li>
 				</ul>
